@@ -1,73 +1,105 @@
 // Порт 
 class Port {
 
-  constructor (name, country) { 
-
+ constructor (name, country) { 
+  
     this.name = name; 
     this.country = country; 
-    this.docks = new Array() // масив пристаней, що належать до цього порту 
-    this.ships = new Array() // масив кораблів, що належать до цього порту 
-  
+    this.docks = [] // масив пристаней, що належать до цього порту 
+    this.ships = [] // масив кораблів, що належать до цього порту 
+    
     if (typeof name === 'undefined') { this.name = "Невідомий порт"; }
     if (typeof country === 'undefined') { this.country = "Невідома країна"; }
-
-  } 
-
+  
+ } 
+  
 }
 
+  
 // Список усіх кораблів
 let global_ports_list = new Array();
 
-// Додавання нового порту в колекцію 
-function addPort(name, country) { 
-  let port = new Port(name, country); 
-  global_ports_list.push(port); 
-  return port; 
-} 
- 
-// Редагування порту в колекції 
-function editPort(port, name, country) { 
-  port.name = name; 
-  port.country = country; 
-  return port; 
-} 
- 
-// Видалення порту з колекції 
-function removePort(port) { 
-  let index = global_ports_list.indexOf(port); 
-  if (index !== -1) { 
-    global_ports_list.splice(index, 1); 
-  } 
-} 
- 
-// Пошук одного порту в колекції 
-function findPort(name) { 
-  return global_ports_list.find(function(port) { 
-    return port.name === name; 
-  }); 
+// Знайти лікарню в колекції
+function find_Port(name, country) {
+
+    for (let port_1 of global_ports_list) {
+
+        if (name === port_1.name &&
+            country === port_1.country) { return port_1; }
+
+    }
+
+    return -1;
+
 }
 
-// Отримання списоку портів
+// Додавання нової лікарні
+function add_Port(name, country) {
+
+    let port1 = new Port(name, country);
+    global_ports_list.push(port1);
+
+    return port1;
+
+}
+
+// Видалити лікарню з колекції
+function remove_Port(name, country) {
+
+    for (let id = 0; id < global_ports_list.length; id++) {
+
+        let port_11 = global_ports_list[id];
+
+        if (port_11.name === name &&
+            port_11.country === country) { global_ports_list.splice(id, 1);
+                                            return 1; }
+
+    }
+
+    return -1;
+
+}
+
+// Редагувати лікарню в колекції
+function edit_Port(name, country, new_name, new_country) {
+
+    for (let id = 0; id < global_ports_list.length; id++) {
+
+        let port11 = global_ports_list[id];
+
+        if (port11.name === name &&
+            port11.country === country) { global_ports_list[id].name = new_name;
+                                            global_ports_list[id].country = new_country;
+                                            return 1; }
+
+    }
+
+    return -1;
+
+}
+
+// Отримати список лікарень
 function get_Ports_List() {
 
-  console.log("\n" + "Список усіх портів:");
+    console.log("\n" + "Список усіх портів:");
 
-  for (let id = 0; id < global_ports_list.length; id++) {
+    for (let id = 0; id < global_ports_list.length; id++) {
 
-      let port = global_ports_list[id];
-      console.log(`Назва порта: ${port.name}, країна порта: ${port.country}`);
+        let portt = global_ports_list[id];
+        console.log(`Назва порта: ${portt.name}, країна порта: ${portt.country}`);
 
-  }
+    }
 
-  console.log();
-  
-  return global_ports_list;
+    console.log();
+    
+    return global_ports_list;
 
 }
 
-exports.Port = Port;
-exports.addPort = addPort;
-exports.editPort = editPort;
-exports.removePort = removePort;
-exports.findPort = findPort;
+// Експортуємо функції
+
+exports.find_Port = find_Port;
+exports.add_Port= add_Port;
+exports.remove_Port = remove_Port;
+exports.edit_Port = edit_Port;
 exports.get_Ports_List = get_Ports_List;

@@ -1,5 +1,3 @@
-const ports_list = require('./port'); 
-
 // Пристань 
 class Dock {
   
@@ -15,78 +13,112 @@ class Dock {
 
 }
 
-// Додавання пристані до порту 
-function addDock (name, port) { 
-  let dock = new Dock(name, port); 
-  ports_list.docks.push(dock); 
+// Список усіх пристаней
+let global_docks_list = new Array();
 
-  return dock; 
+// Знаходження пристані
+function find_Dock (name, port) {
 
-}
+  for (let id = 0; id < global_docks_list.length; id++) {
 
-// Видалення пристані із порту 
-function removeDock(dock) { 
-  let index = ports_list.docks.indexOf(dock); 
-  if (index !== -1) { 
-    ports_list.docks.splice(index, 1); 
-  } 
-  let port1 = dock.port; 
-  if (port1 && ports_list.docks) { 
-    index = ports_list.docks.indexOf(dock); 
-    if (index !== -1) { 
-      ports_list.docks.splice(index, 1); 
-    } 
+      let dock = global_docks_list[id];
+
+      if (name === dock.name &&
+          port === dock.port) { return dock; }
+
   }
+
+  return -1;
+
 }
 
+// Додавання пристані
+function add_Dock(name, port) {
+
+  let dock = new Dock(name, port);
+  global_docks_list.push(dock);
+
+  return dock;
+
+}
+
+// Видаляння пристані
+function remove_Dock(name, port) {
+
+  let dock = find_Dock(name, port);
+
+  if (dock === -1) { return -1; }
+
+  let id = global_docks_list.indexOf(dock);
+  global_docks_list.splice(id, 1);
+
+  return 1;
+
+}
 
 // Прибуття корабля на пристань 
-function arriveShip(ship, dock) { 
-    if (ports_list.docks) { // якщо корабель вже на пристані, то він спочатку повинен відбути 
-      leaveShip(ship); 
-    } 
-    ports_list.docks = dock; 
-    dock.ship = ship; 
+function arrive_Ship(ship, dock) { 
+  
+  if (ship.dock) { // якщо корабель вже на пристані, то він спочатку повинен відбути 
+  
+  leave_Ship(ship); 
+  
+  } 
+  
+  ship.dock = dock; 
+  dock.ship = ship; 
+
 } 
-     
-// Відбуття корабля від пристані 
-function leaveShip() { 
-    let dock = ports_list.docks; 
-    if (dock) { 
-      dock.ship = null; 
-      ports_list.docks = null; 
-    } 
+   
+  // Відбуття корабля від пристані 
+function leave_Ship(ship) { 
+  
+  let dock = ship.dock; 
+  
+  if (dock) { 
+    
+  dock.ship = null; 
+  ship.dock = null;
+
+ } 
+
 } 
-     
+
 // Пошук усіх кораблів на пристані 
-function findShipsOnDock(dock) { 
-    return ports_list.docks.filter(function(ship) { 
-      return ports_list.docks === dock; 
-    }); 
+function find_Ships_On_Dock(dock) { 
+  
+  return global_docks_list.filter(function(ship) { 
+  
+    return ship.dock === dock;
+  
+  }); 
+
 }
 
-// Отримання списоку пристаней
-function get_Docks_List() {
+// Отримання списку пристаней
+function get_Docks_List () {
 
-  console.log("\n" + `Список усіх кораблів на пристані: ${ports_list.name}`);
+  console.log("\n" + `Список усіх пристаней:`);
 
-  for (let id = 0; id < ports_list.docks.length; id++) {
+  for (let id = 0; id < global_docks_list.length; id++) {
 
-      let dock = ports_list.docks[id];
-      console.log(`Назва пристані: ${dock.name}, порт до якого належить пристань: ${dock.port}`);
+      let dock = global_docks_list[id];
+      console.log(`\tІм'я пристані: ${dock.name}, порт який належить пристані: ${dock.port}`);
 
   }
 
   console.log();
   
-  return ports_list.docks;
+  return global_docks_list;
 
 }
 
-
-exports.Dock = Dock;
-exports.addDock = addDock;
-exports.removeDock = removeDock;
-exports.arriveShip = arriveShip;
-exports.findShipsOnDock = findShipsOnDock;
-exports.get_Docks_List = get_Docks_List; 
+// Експортуємо функції
+exports.Dock = Dock
+exports.find_Dock = find_Dock;
+exports.add_Dock = add_Dock;
+exports.remove_Dock = remove_Dock;
+exports.arrive_Ship = arrive_Ship;
+exports.leave_Ship = leave_Ship;
+exports.find_Ships_On_Dock = find_Ships_On_Dock;
+exports.get_Docks_List = get_Docks_List;

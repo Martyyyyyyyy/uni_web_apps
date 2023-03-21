@@ -1,5 +1,3 @@
-const port_list = require('./port'); 
-
 // Корабель 
 class Ship {
     
@@ -17,60 +15,88 @@ class Ship {
 
 }
 
-// Додавання корабля в колекцію 
-function addShip(name, country, size) { 
-    let ship = new Ship(name, country, size); 
-    port_list.ships.push(ship); 
-    return ship; 
-  } 
-   
-let ship1 = addShip('Titanic', 'United Kingdom', 882);
-console.log('Доданий корабель:', ship1);
+// Список усіх кораблів
+let global_ships_list = new Array();
 
-// Редагування корабля в колекції 
-function editShip(ship, name, country, size) { 
-    ship.name = name; 
-    ship.country = country; 
-    ship.size = size; 
-    return ship; 
-  } 
-   
-// Видалення корабля з колекції 
-function removeShip(ship) { 
-    var index = port_list.ships.indexOf(ship); 
-    if (index !== -1) { 
-      port_list.ships.splice(index, 1); 
-    } 
-} 
-   
 // Пошук одного корабля в колекції 
-function findShip(name) { 
-    return port_list.ships.find(function(ship) { 
-      return ship.name === name; 
-    }); 
-}
+function find_Ship (name, country, size) {
 
-// Отримання списку кораблів
-function get_Ships_List() {
+    for (let id = 0; id < global_ships_list.length; id++) {
 
-  console.log("\n" + "Список усіх кораблів:");
+        let ship_1 = global_ships_list[id];
 
-  for (let id = 0; id < port_list.ships.length; id++) {
+        if (name === ship_1.name && country === ship_1.country && size === ship_1.size) 
+        { return ship_1; }
 
-      let ship = port_list.ships[id];
-      console.log(`Назва корабля: ${ship.name}, країна корабля: ${ship.country}, розмір корабля: ${ship.size}`);
+    }
 
-  }
-
-  console.log();
-  
-  return port_list.ships;
+    return -1;
 
 }
 
-exports.Ship = Ship;
-exports.addShip = addShip;
-exports.editShip = editShip;
-exports.removeShip = removeShip;
-exports.findShip = findShip;
+// Додавання нового лікаря
+function add_Ship (name, country, size) {
+
+    let ship1 = new Ship(name, country, size);
+    global_ships_list.push(ship1);
+
+    return ship1;
+
+}
+
+// Видалення лікаря з лікарні
+function remove_Ship (name, country, size) {
+
+    let ship11 = find_Ship(name, country, size);
+
+    if (ship11 === -1) { return -1; }
+
+    let id = global_ships_list.indexOf(ship11);
+    global_ships_list.splice(id, 1);
+
+    return 1;
+
+}
+
+// Редагувати лікаря в лікарні
+function edit_Ship (name, country, size, new_name, new_country, new_size) {
+
+    let shipp = find_Ship(name, country, size);
+
+    if (shipp === -1) { return -1; }
+
+    let id = global_ships_list.indexOf(shipp);
+    
+    global_ships_list[id].name = new_name;
+    global_ships_list[id].country = new_country;
+    global_ships_list[id].size = new_size;
+
+    return 1;
+
+}
+
+// Отримати список лікарів у конкретній лікарні
+function get_Ships_List () {
+
+    console.log("\n" + `Список усіх кораблів:`);
+
+    for (let id = 0; id < global_ships_list.length; id++) {
+
+        let shipp1 = global_ships_list[id];
+        console.log(`\tІм'я корабля: ${shipp1.name}, країна: ${shipp1.country}`);
+
+    }
+
+    console.log();
+    
+    return global_ships_list;
+
+}
+
+// Експортуємо функції
+
+exports.find_Ship = find_Ship;
+exports.add_Ship = add_Ship;
+exports.remove_Ship = remove_Ship;
+exports.edit_Ship = edit_Ship;
 exports.get_Ships_List = get_Ships_List;
